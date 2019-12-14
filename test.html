@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script src="js/animate.js"></script>
+    <title>test</title>
+    <style>
+        .test
+        {
+            background: gray;
+        }
+        .myimg
+        {
+             display:inline-block;
+        }
+        .box{
+            width: 1200px;
+            height: 382px;
+            border: 1px solid red;
+            margin: 100px auto;
+            position: relative;
+            overflow: hidden;,
+        }
+        .slider
+        {
+            width:8400px;
+            position: absolute;
+            left: -1200px;
+        }
+        .slide
+        {
+            width:1200px;
+            overflow:hidden;
+            float: left;
+        }
+        .box>span
+        {
+            display:bock;
+            width:30px;
+            height:50px;
+            text-align: center;
+            cursor: pointer;
+            color:;
+            top:175px;
+            line-height: 50px;
+            background: rgb(255,0,0);
+            font-size: 30px;
+            position:absolute;
+            opacity: 0;
+        }
+        #left
+        {
+            left:30px;
+        }
+        #right
+        {
+            right: 30px;
+        }
+        .nav
+        {
+            position: absolute;
+            left:500px;
+            bottom:20px;
+        }
+        .nav>li
+        {
+            float:left;
+            width:20px;
+            height:20px;
+            background: #ccc;
+            cursor:pointer;
+            margin:0 10px;
+            border-radius: 50%;
+        }
+        .nav .active
+        {
+            background: red;
+        }
+        #scroll_div 
+        {
+            display:inline-block;
+            height:30px;
+            overflow: hidden;
+            white-space: nowrap;
+            width:1300px;
+            background-color: gray;
+            color: #999999;
+            text-align: center;
+            color: RED;
+        }
+        #scroll_begin,#scroll_end {
+            display: inline;
+        }
+    </style>
+</head>
+
+<body> 
+    <div id="test" class="test">
+        <img id ="myimg" src="images/a15.png" alt="">
+        <div id="scroll_div" class="fl">
+            <div id="scroll_begin">
+                [温馨提示]<span class="pad_right">最近有不少不法分子在网上骗人，请大家注意！！！</span>
+                [温馨提示]<span class="pad_right">最近有不少不法分子在网上骗人，请大家注意！！！</span>
+                [温馨提示]<span class="pad_right">最近有不少不法分子在网上骗人，请大家注意！！！</span>
+                [温馨提示]<span class="pad_right">最近有不少不法分子在网上骗人，请大家注意！！！</span>
+                [温馨提示]<span class="pad_right">最近有不少不法分子在网上骗人，请大家注意！！！</span>
+                [温馨提示]<span class="pad_right">最近有不少不法分子在网上骗人，请大家注意！！！</span>
+            </div>
+            <div id="scroll_end">
+            </div>
+        </div>
+    </div>
+       
+    <div class="box" id="box">
+        <div class="slider" id="slider">
+            <div class="slide"><img src="images/b5.png" alt=""></div>
+            <div class="slide"><img src="images/b1.png" alt=""></div>
+            <div class="slide"><img src="images/b2.png" alt=""></div>
+            <div class="slide"><img src="images/b3.png" alt=""></div>
+            <div class="slide"><img src="images/b4.png" alt=""></div>
+            <div class="slide"><img src="images/b5.png" alt=""></div>
+            <div class="slide"><img src="images/b1.png" alt=""></div>
+        </div>
+        <span id="left"><</span>
+        <span id="right">></span>
+        <ul class="nav" id="nav">
+            <li class="active"></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+        </ul>
+    </div>
+    
+    <script type="text/javascript">
+        var box = document.getElementById('box');
+        var NavList = document.getElementById('nav').children;
+        var slider = document.getElementById('slider');
+        var left = document.getElementById('left');
+        var right = document.getElementById('right');
+        var index = 1;
+        //var timer;
+        var isMoving = false;
+
+        function next()
+        {
+            index++;
+            navChange();
+            animate(slider,{left:-1200*index},function()
+            {
+                if(index === 6)
+                {
+                    slider.style.left="-1200px";
+                    index = 1;
+                }
+            });
+        }
+
+         function prev()
+        {
+            index--;
+            navChange();
+            animate(slider,{left:-1200*index},function()
+            {
+                if(index === 0)
+                {
+                    slider.style.left="-6000px";
+                    index = 5;
+                }
+            });
+        }
+
+        var timer = setInterval(next,2000);
+        
+        box.onmouseover = function()
+        {
+            animate(left,{opacity:50});
+            animate(right,{opacity:50});
+            clearInterval(timer);
+        }
+        box.onmouseout = function()
+        {
+            animate(left,{opacity:0});
+            animate(right,{opacity:0});
+            timer = setInterval(next,2000);
+        }
+
+        right.onclick = next;
+        left.onclick = prev;
+
+        for(var i = 0 ; i < NavList.length ; i++)
+        {
+            NavList[i].idx = i;
+            NavList[i].onclick = function()
+            {
+                index = this.idx+1;
+                navChange();
+                animate(slider,{left:-1200*index});
+               
+            }
+        }
+
+        function navChange()
+        {
+            for(var i = 0 ; i < NavList.length ; i++)
+            {
+                NavList[i].className='';
+            }
+            if(index === 6)
+            {
+                NavList[0].className = 'active';
+            }
+            else if(index === 0)
+            {
+                NavList[4].className = 'active';
+            }
+            else
+            {
+                NavList[index-1].className = 'active';
+            }
+            
+        }
+
+           
+        function Scroll()
+        {
+            var speed=50;
+            var MyTest = null;
+            var scroll_begin = document.getElementById("scroll_begin");
+            var scroll_end = document.getElementById("scroll_end");
+            var scroll_div = document.getElementById("scroll_div");
+            scroll_end.innerHTML=scroll_begin.innerHTML;
+
+            function Marquee()
+            {
+                if(scroll_end.offsetWidth-scroll_div.scrollLeft<=0)
+                    scroll_div.scrollLeft-=scroll_begin.offsetWidth;
+                else
+                    scroll_div.scrollLeft++;
+            }
+            MyTest=setInterval(Marquee,speed);
+            scroll_div.onmouseover = function()
+            {
+                clearInterval(MyTest);
+            }
+            scroll_div.onmouseout = function()
+            {
+                MyTest = setInterval(Marquee,speed);
+            }
+        }
+        Scroll();
+    </script>
+
+</body>
+</html>
